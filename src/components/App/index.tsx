@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { ipcRenderer } from 'electron'
 
 const Entry = ({ id, isSelected, value, metadata }) => {
   return (
@@ -21,9 +22,11 @@ export default function App ({ entries }) {
 
     switch (event.key) {
       case 'ArrowLeft':
-        return setPosition(current => current - 1)
+        return setPosition(current => Math.max(0, current - 1))
       case 'ArrowRight':
         return setPosition(current => current + 1)
+      case 'Enter':
+        return ipcRenderer.send('copy', position)
       default:
         return
     }
