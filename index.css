@@ -28,15 +28,8 @@ h2 {
   overflow-x: scroll;
   display: grid;
   grid-gap: 12px;
-  grid-auto-columns: 1fr;
-}
-
-.Entry:first-child {
-  margin-left: 24px;
-}
-
-.Entry:last-child {
-  margin-right: 36px;
+  grid-auto-columns: 220px;
+  padding-left: 12px;
 }
 
 .Entry {
