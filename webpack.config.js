@@ -3,6 +3,7 @@ const { resolve } = require('path');
 module.exports = {
     mode: 'development',
     entry: './src/index.tsx',
+    target: 'electron-renderer',
     resolve: {
         extensions: ['.ts', '.tsx', '.js']
     },
