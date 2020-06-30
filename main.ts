@@ -7,7 +7,16 @@ import {
   ipcMain
 } from 'electron'
 import { resolve } from 'path'
-import { reverse } from './src/utils'
+
+const CircularBuffer = require('circular-buffer')
+const Store = require('electron-store')
+
+const Config = new Store({
+  defaults: {
+    shortcut: 'CommandOrControl+Shift+1',
+    capacity: 50
+  }
+})
 
 const debug = process.env.NODE_ENV === 'development'
 const verbose = (...args) => debug && console.log(...args)
@@ -50,11 +59,12 @@ const initializeClipboard = win => {
   const last = {
     text: clipboard.readText()
   }
-  const stack = [] // TODO: replace with a FIFO and make max element configurable
+
+  const stack = new CircularBuffer(Config.get('capacity'))
 
   ipcMain.on('copy', (event, index) => {
-    verbose('event: copy')
-    const entry = reverse(stack)[index]
+    const entry = stack.get(index)
+    verbose('event: copy', entry.value)
     if (entry) {
       last.text = entry.value
       clipboard.writeText(entry.value)
@@ -66,7 +76,7 @@ const initializeClipboard = win => {
   setInterval(() => {
     const value = clipboard.readText()
     if (value !== last.text) {
-      verbose('info', 'last value', last)
+      verbose('info:', 'last value', last)
       last.text = value
 
       const entry = {
@@ -77,9 +87,9 @@ const initializeClipboard = win => {
         }
       }
 
-      stack.push(entry)
+      stack.enq(entry)
 
-      win.webContents.send('update', reverse(stack))
+      win.webContents.send('update', stack.toarray())
     }
   }, 1000)
 }
@@ -88,11 +98,11 @@ app.whenReady().then(() => {
   const win = createWindow()
   initializeClipboard(win)
 
-  //TODO: Make shortcut configurable
-  globalShortcut.register('CommandOrControl+Shift+1', () => {
+  globalShortcut.register(Config.get('shortcut'), () => {
     verbose('event: register globalShortcut')
     if (win.isVisible()) {
-      app.hide() // Hide the app not the window, to restore previous window focus
+      // This hide the app not the window, to restore previous window focus
+      app.hide()
     } else {
       win.show()
     }

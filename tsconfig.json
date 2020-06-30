@@ -10,7 +10,8 @@
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
     "esModuleInterop": true,
-    "jsx": "react"
+    "jsx": "react",
+    "resolveJsonModule": true
   },
   "exclude": ["node_modules"]
 }
