@@ -1,6 +1,6 @@
 {
   "name": "colle",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "main": "dist/main.js",
   "license": "MIT",
   "description": "A Clipboard Copy-Paste manager",
@@ -20,7 +20,12 @@
     "directories": {
       "output": "./build"
     },
-    "files": ["dist/", "public/", "node_modules", "package.json"],
+    "files": [
+      "dist/",
+      "public/",
+      "node_modules",
+      "package.json"
+    ],
     "dmg": {
       "contents": [
         {
@@ -42,18 +47,18 @@
     "electron-store": "^5.2.0"
   },
   "devDependencies": {
-    "electron-builder": "^22.7.0",
-    "ts-loader": "^7.0.5",
-    "typescript": "^3.9.5",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
     "@types/date-fns": "^2.6.0",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
     "css-loader": "^3.6.0",
     "date-fns": "^2.14.0",
     "electron": "^9.0.5",
+    "electron-builder": "^22.7.0",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
   }
 }
