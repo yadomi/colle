@@ -35,6 +35,7 @@ const createWindow = () => {
     skipTaskbar: true,
     frame: false,
     show: debug ? true : false,
+    hasShadow: false,
     x: 0,
     y: 0,
     transparent: true,

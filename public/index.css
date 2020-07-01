@@ -19,7 +19,7 @@ h2 {
   left: 0;
   right: 0;
   width: 100%;
-  background: #eee;
+  background: rgba(238, 238, 238, 0.85);
   box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.5);
 }
 
