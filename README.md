@@ -1,10 +1,10 @@
 # Colle
 
+![preview](https://i.imgur.com/Tb6CDwX.gif)
+
 ## Motivation
 
-Paste 2 is a very powerfull tool, it's has good native feeling and is very efficient as a clipboard manager tool. However, beside the fact it wasn't cheap at first (about 20€) it is now a subscription based pricing, which is ridiculus.
-
-Colle try to be an easy and free alternative to Paste, coded with rage in a very short period of time.
+Paste 2 is a very powerfull tool, it's has good native feeling and is very efficient as a clipboard manager tool. However beside the fact it wasn't cheap at first (about 20€) it is now a subscription based pricing, which is ridiculus.
 
 ### Roadmap
 
@@ -13,6 +13,7 @@ Colle try to be an easy and free alternative to Paste, coded with rage in a very
 - [ ] Add more clipboard type (image, rtf, html ect...)
 - [ ] Add settings/configuration window
 - [ ] Performance
+- [ ] Reduce footprint
 - [ ] Add clipboard persistance
 - [ ] Bundle as executable (dmg)
 
