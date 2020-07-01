@@ -1,6 +1,7 @@
 # Colle
 
-![preview](https://i.imgur.com/Tb6CDwX.gif)
+[<img src="https://i.imgur.com/c3qVdiC.png">](https://i.imgur.com/xskIC9c.mp4)
+
 
 ## Motivation
 
