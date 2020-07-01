@@ -55,9 +55,11 @@ const createWindow = () => {
   })
   win.loadURL(index)
 
-  win.on('blur', () => {
-    win.hide()
-  })
+  if (!debug) {
+    win.on('blur', () => {
+      win.hide()
+    })
+  }
 
   return win
 }
