@@ -1,29 +1,59 @@
 {
   "name": "colle",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/main.js",
   "license": "MIT",
+  "description": "A Clipboard Copy-Paste manager",
+  "author": {
+    "name": "Felix Yadomi",
+    "email": "felix.yadomi@gmail.com"
+  },
   "scripts": {
     "build:bundle": "webpack",
     "build:electron": "tsc main.ts --outDir dist/",
-    "start": "electron dist/main.js"
+    "start": "electron dist/main.js",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "fr.yadomi.colle",
+    "productName": "Colle",
+    "directories": {
+      "output": "./build"
+    },
+    "files": ["dist/", "public/", "node_modules", "package.json"],
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    }
   },
   "dependencies": {
-    "@types/date-fns": "^2.6.0",
-    "@types/react": "^16.9.41",
-    "@types/react-dom": "^16.9.8",
     "circular-buffer": "^1.0.2",
-    "css-loader": "^3.6.0",
-    "date-fns": "^2.14.0",
-    "electron": "^9.0.5",
-    "electron-store": "^5.2.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "electron-store": "^5.2.0"
   },
   "devDependencies": {
+    "electron-builder": "^22.7.0",
     "ts-loader": "^7.0.5",
     "typescript": "^3.9.5",
     "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12"
+    "webpack-cli": "^3.3.12",
+    "@types/date-fns": "^2.6.0",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "css-loader": "^3.6.0",
+    "date-fns": "^2.14.0",
+    "electron": "^9.0.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }
