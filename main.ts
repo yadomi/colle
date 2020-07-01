@@ -7,6 +7,7 @@ import {
   ipcMain
 } from 'electron'
 import { resolve } from 'path'
+import { format } from 'url'
 
 const CircularBuffer = require('circular-buffer')
 const Store = require('electron-store')
@@ -44,8 +45,12 @@ const createWindow = () => {
     }
   })
 
-  const index = resolve('./index.html')
-  win.loadFile(index)
+  const index = format({
+    pathname: resolve(__dirname, '../public/index.html'),
+    protocol: 'file:',
+    slashes: true
+  })
+  win.loadURL(index)
 
   win.on('blur', () => {
     win.hide()
