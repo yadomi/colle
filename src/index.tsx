@@ -30,7 +30,7 @@ const Provider = () => {
     ipcRenderer.on('update', (event, data) => {
       setState(data)
     })
-  })
+  }, [])
 
   return <App entries={state} />
 }
