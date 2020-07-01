@@ -32,7 +32,6 @@ const createWindow = () => {
     movable: false,
     minimizable: false,
     maximizable: false,
-    alwaysOnTop: true,
     skipTaskbar: true,
     frame: false,
     show: debug ? true : false,
@@ -44,6 +43,9 @@ const createWindow = () => {
       nodeIntegration: true
     }
   })
+
+  win.setVisibleOnAllWorkspaces(true)
+  win.setAlwaysOnTop(true, 'pop-up-menu')
 
   const index = format({
     pathname: resolve(__dirname, '../public/index.html'),
