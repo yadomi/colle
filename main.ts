@@ -4,7 +4,9 @@ import {
   BrowserWindow,
   globalShortcut,
   clipboard,
-  ipcMain
+  ipcMain,
+  Menu,
+  Tray
 } from 'electron'
 import { resolve } from 'path'
 import { format } from 'url'
@@ -104,8 +106,26 @@ const initializeClipboard = win => {
   }, 1000)
 }
 
+const initializeTray = ({ config }) => {
+  const tray = new Tray(resolve(__dirname, '../public/icon_tray.png'))
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Settings',
+      click: () => config.openInEditor()
+    },
+    { type: 'separator' },
+    {
+      label: 'Quit',
+      click: () => app.quit()
+    }
+  ])
+  tray.setToolTip('This is my application.')
+  tray.setContextMenu(contextMenu)
+}
+
 app.whenReady().then(() => {
   const win = createWindow()
+  initializeTray({ config: Config })
   initializeClipboard(win)
 
   globalShortcut.register(Config.get('shortcut'), () => {
