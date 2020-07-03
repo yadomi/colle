@@ -21,8 +21,37 @@ Paste 2 is a very powerfull tool, it's a very efficient as a clipboard manager t
 
 ### FAQ
 
-Q: Why the name ?
-A: Colle is the french word for paste.
+- **Q: Why the name ?**
+  - A: Colle is the french word for paste.
 
-Q: What's in on top and not at the bottom like Paste ?
-A: For some reason I can't get to place the window on top of the Dock with Electron.
+- **Q: What's in on top and not at the bottom like Paste ?**
+  - A: For some reason I can't get to place the window on top of the Dock with Electron.
+
+
+## How to run locally ? 
+
+1. Install the dependancies:
+
+```
+yarn install
+```
+
+2. Build and watch the main process in one terminal
+
+```
+yarn build:electron --watch
+```
+
+3. Build and watch the renderer in another terminal
+
+```
+yarn build:bundle --watch
+```
+
+4. Finally, run the application (in another terminal, yes)
+
+```
+NODE_ENV=development yarn start
+```
+
+Note: any changes to the main process needs to restart the application. Changes made to the rendered can be reloaded with a simple page reload (Cmd+R in dev tools)
