@@ -6,26 +6,26 @@ import {
   clipboard,
   ipcMain,
   Menu,
-  Tray
-} from 'electron'
-import { resolve } from 'path'
-import { format } from 'url'
+  Tray,
+} from "electron";
+import { resolve } from "path";
+import { format } from "url";
 
-const CircularBuffer = require('circular-buffer')
-const Store = require('electron-store')
+const CircularBuffer = require("circular-buffer");
+const Store = require("electron-store");
 
 const Config = new Store({
   defaults: {
-    shortcut: 'CommandOrControl+Shift+1',
-    capacity: 50
-  }
-})
+    shortcut: "Super+Shift+1",
+    capacity: 50,
+  },
+});
 
-const debug = process.env.NODE_ENV === 'development'
-const verbose = (...args) => debug && console.log(...args)
+const debug = process.env.NODE_ENV === "development";
+const verbose = (...args) => debug && console.log(...args);
 
 const createWindow = () => {
-  const { workAreaSize } = screen.getPrimaryDisplay()
+  const { workAreaSize } = screen.getPrimaryDisplay();
 
   const win = new BrowserWindow({
     width: workAreaSize.width,
@@ -43,103 +43,108 @@ const createWindow = () => {
     transparent: true,
     webPreferences: {
       webSecurity: false,
-      nodeIntegration: true
-    }
-  })
+      nodeIntegration: true,
+    },
+  });
 
-  win.setVisibleOnAllWorkspaces(true)
-  win.setAlwaysOnTop(true, 'pop-up-menu')
+  win.setVisibleOnAllWorkspaces(true);
+  win.setAlwaysOnTop(true, "pop-up-menu");
 
   const index = format({
-    pathname: resolve(__dirname, '../public/index.html'),
-    protocol: 'file:',
-    slashes: true
-  })
-  win.loadURL(index)
+    pathname: resolve(__dirname, "../public/index.html"),
+    protocol: "file:",
+    slashes: true,
+  });
+  win.loadURL(index);
 
   if (!debug) {
-    win.on('blur', () => {
-      win.hide()
-    })
+    win.on("blur", () => {
+      win.hide();
+    });
   }
 
-  return win
-}
+  return win;
+};
 
-const initializeClipboard = win => {
-  verbose('event: initializeClipboard')
+const initializeClipboard = (win) => {
+  verbose("event: initializeClipboard");
   const last = {
-    text: clipboard.readText()
-  }
+    text: clipboard.readText(),
+  };
 
-  const stack = new CircularBuffer(Config.get('capacity'))
+  const stack = new CircularBuffer(Config.get("capacity"));
 
-  ipcMain.on('copy', (event, index) => {
-    const entry = stack.get(index)
-    verbose('event: copy', entry.value)
+  ipcMain.on("copy", (event, index) => {
+    const entry = stack.get(index);
+    verbose("event: copy", entry.value);
     if (entry) {
-      last.text = entry.value
-      clipboard.writeText(entry.value)
+      last.text = entry.value;
+      clipboard.writeText(entry.value);
 
-      app.hide()
+      win.minimize();
     }
-  })
+  });
 
   setInterval(() => {
-    const value = clipboard.readText()
+    const value = clipboard.readText();
     if (value !== last.text) {
-      verbose('info:', 'last value', last)
-      last.text = value
+      verbose("info:", "last value", last);
+      last.text = value;
 
       const entry = {
         value,
         metadata: {
-          type: 'text',
-          copiedAt: new Date()
-        }
-      }
+          type: "text",
+          copiedAt: new Date(),
+        },
+      };
 
-      stack.enq(entry)
+      stack.enq(entry);
 
-      win.webContents.send('update', stack.toarray())
+      win.webContents.send("update", stack.toarray());
     }
-  }, 1000)
-}
+  }, 1000);
+};
 
 const initializeTray = ({ config }) => {
-  const tray = new Tray(resolve(__dirname, '../public/icon_tray.png'))
+  const tray = new Tray(resolve(__dirname, "../public/icon_tray.png"));
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Settings',
-      click: () => config.openInEditor()
+      label: "Settings",
+      click: () => config.openInEditor(),
     },
-    { type: 'separator' },
+    { type: "separator" },
     {
-      label: 'Quit',
-      click: () => app.quit()
-    }
-  ])
-  tray.setToolTip('This is my application.')
-  tray.setContextMenu(contextMenu)
-}
+      label: "Quit",
+      click: () => app.quit(),
+    },
+  ]);
+  tray.setToolTip("This is my application.");
+  tray.setContextMenu(contextMenu);
+};
 
 app.whenReady().then(() => {
-  const win = createWindow()
-  initializeTray({ config: Config })
-  initializeClipboard(win)
+  const win = createWindow();
+  initializeTray({ config: Config });
+  initializeClipboard(win);
 
-  globalShortcut.register(Config.get('shortcut'), () => {
-    verbose('event: register globalShortcut')
+  globalShortcut.register(Config.get("shortcut"), () => {
+    verbose("event: register globalShortcut");
     if (win.isVisible()) {
       // This hide the app not the window, to restore previous window focus
-      app.hide()
-    } else {
-      win.show()
-    }
-  })
-})
+      // app.hide();
 
-app.dock.hide()
-app.once('window-all-closed', () => {
-  app.quit()
-})
+      win.minimize();
+    } else {
+      win.show();
+    }
+  });
+});
+
+if (process.platform === "darwin") {
+  app.dock.hide();
+}
+
+app.once("window-all-closed", () => {
+  app.quit();
+});
