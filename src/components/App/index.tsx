@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { ipcRenderer } from "electron";
 
-const Entry = ({ id, isSelected, value, metadata }) => {
+function copy(at: number) {
+  return ipcRenderer.send("copy", at);
+}
+
+const Entry = ({ position, isSelected, value, metadata }) => {
+  const onClick = () => copy(position);
+
   return (
-    <div className="Entry" data-is-selected={isSelected}>
+    <div className="Entry" onClick={onClick} data-is-selected={isSelected}>
       <header>
         <h1>{metadata.type}</h1>
         <h2>{formatDistanceToNow(metadata.copiedAt)}</h2>
@@ -16,7 +22,6 @@ const Entry = ({ id, isSelected, value, metadata }) => {
 
 export default function App({ entries }) {
   const [position, setPosition] = useState(0);
-  console.log({ entries }, entries);
 
   const onKeyUp = (event) => {
     event.preventDefault();
@@ -27,7 +32,7 @@ export default function App({ entries }) {
       case "ArrowRight":
         return setPosition((current) => Math.min(current + 1, entries.length - 1));
       case "Enter":
-        return ipcRenderer.send("copy", position);
+        return copy(position);
       default:
         return;
     }
@@ -45,7 +50,7 @@ export default function App({ entries }) {
     <div className="App">
       <div className="App-Entries">
         {entries.map((entry, index) => (
-          <Entry isSelected={index === position} key={index} {...entry} />
+          <Entry isSelected={index === position} position={index} key={index} {...entry} />
         ))}
       </div>
     </div>
